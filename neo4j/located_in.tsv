@@ -1,0 +1,6 @@
+source	target	label	model
+Lung cancer	Lung	LOCATED_IN	NULL
+Bronchitis	Bronchi	LOCATED_IN	NULL
+Tuberculosis	Lung	LOCATED_IN	NULL
+COVID-19	Lung	LOCATED_IN	NULL
+Lung disease	Lung	LOCATED_IN	NULL

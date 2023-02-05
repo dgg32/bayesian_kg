@@ -1,0 +1,6 @@
+source	target	label	model
+Visit To Asia	Tuberculosis	INCREASES_RISK	Asia
+Visit To Asia	COVID-19	INCREASES_RISK	Asia
+Smoking	Bronchitis	INCREASES_RISK	Asia
+Smoking	Lung cancer	INCREASES_RISK	Asia
+Smoking	COVID-19	INCREASES_RISK	Asia

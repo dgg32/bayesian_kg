@@ -1,0 +1,12 @@
+source	target
+Bronchitis	Dyspnea
+Visit To Asia	Tuberculosis
+Visit To Asia	COVID-19
+Smoking	Bronchitis
+Smoking	Lung cancer
+Smoking	COVID-19
+Lung cancer	Lung disease
+Tuberculosis	Lung disease
+COVID-19	Lung disease
+Lung disease	Dyspnea
+Lung disease	X-ray

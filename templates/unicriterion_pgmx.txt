@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProbModelXML formatVersion="0.2.0">
+  <ProbNet type="BayesianNetwork">
+    <AdditionalProperties>
+      <Property name="Version" value="1.0" />
+      <Property name="VisualPrecision" value="0.0" />
+      <Property name="KindOfGraph" value="directed" />
+      <Property name="WhenChanged" value="19/08/99" />
+      <Property name="WhoChanged" value="Jose A. Gamez" />
+    </AdditionalProperties>
+    <Variables>
+        {% for node in nodes -%}
+            <Variable name="{{ node.name }}" type="{{ node.type }}" role="{{ node.role }}">
+            <Coordinates x="{{ node.x }}" y="{{ node.y }}" />
+            <States>
+                {% for s in node.states -%}
+                <State name="{{ s }}" />
+                {% endfor %}
+            </States>
+            </Variable>
+        {% endfor %}
+    </Variables>
+    <Links>
+      {% for link in links -%}
+        <Link directed="true">
+            <Variable name="{{ link.source }}" />
+            <Variable name="{{ link.target }}" />
+        </Link>
+      {% endfor %}
+    </Links>
+    <Potentials>
+      {% for potential in potentials -%}
+        <Potential type="{{ potential.type }}" role="{{ potential.role }}">
+            <Variables>
+            {% for v in potential.variables -%}
+            <Variable name="{{ v }}" />
+            {% endfor %}
+            </Variables>
+            <Values>{{ potential.value }}</Values>
+        </Potential>
+      {% endfor %}
+    </Potentials>
+</ProbNet>
+  <InferenceOptions>
+    <MulticriteriaOptions>
+      <SelectedAnalysisType>UNICRITERION</SelectedAnalysisType>
+    </MulticriteriaOptions>
+  </InferenceOptions>
+</ProbModelXML>

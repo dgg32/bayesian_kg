@@ -1,0 +1,25 @@
+CREATE CONSTRAINT FOR (s:Symptom) REQUIRE s.name IS UNIQUE;
+
+CREATE CONSTRAINT FOR (d:Disease) REQUIRE d.name IS UNIQUE;
+
+CREATE CONSTRAINT FOR (r:Risk) REQUIRE r.name IS UNIQUE;
+
+CREATE CONSTRAINT FOR (a:Anatomy) REQUIRE a.name IS UNIQUE;
+
+LOAD CSV WITH HEADERS FROM 'file:///symptom.tsv' AS row FIELDTERMINATOR '\t' MERGE (s:Symptom {name: row.name, model: row.model, description: row.description, role: row.role, type: row.type, states: row.states});
+
+LOAD CSV WITH HEADERS FROM 'file:///disease.tsv' AS row FIELDTERMINATOR '\t' MERGE (d:Disease {name: row.name, model: row.model, description: row.description, role: row.role, type: row.type, states: row.states});
+
+LOAD CSV WITH HEADERS FROM 'file:///risk.tsv' AS row FIELDTERMINATOR '\t' MERGE (r:Risk {name: row.name, model: row.model, description: row.description, role: row.role, type: row.type, states: row.states});
+
+LOAD CSV WITH HEADERS FROM 'file:///anatomy.tsv' AS row FIELDTERMINATOR '\t' MERGE (a:Anatomy {name: row.name, model: row.model, description: row.description, role: row.role, type: row.type, states: row.states});
+
+
+
+LOAD CSV WITH HEADERS FROM 'file:///has_symptom.tsv' AS row FIELDTERMINATOR '\t' MERGE (d:Disease {name: row.source}) MERGE (s:Symptom {name: row.target}) MERGE (d)-[r:HAS_SYMPTOM]->(s);
+
+LOAD CSV WITH HEADERS FROM 'file:///increases_risk.tsv' AS row FIELDTERMINATOR '\t' MERGE (ri:Risk {name: row.source}) MERGE (d:Disease {name: row.target}) MERGE (ri)-[r:INCREASES_RISK]->(d);
+
+LOAD CSV WITH HEADERS FROM 'file:///is_a.tsv' AS row FIELDTERMINATOR '\t' MERGE (d1:Disease {name: row.source}) MERGE (d2:Disease {name: row.target}) MERGE (d1)-[r:IS_A]->(d2);
+
+LOAD CSV WITH HEADERS FROM 'file:///located_in.tsv' AS row FIELDTERMINATOR '\t' MERGE (d:Disease {name: row.source}) MERGE (a:Anatomy {name: row.target}) MERGE (d)-[r:LOCATED_IN]->(a);

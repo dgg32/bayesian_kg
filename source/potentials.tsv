@@ -1,0 +1,10 @@
+type	role	variables	values	model
+Table	conditionalProbability	X-ray; Lung disease	0.95 0.05 0.02 0.98	Asia
+Table	conditionalProbability	Bronchitis; Smoking	0.7 0.3 0.4 0.6	Asia
+Table	conditionalProbability	Dyspnea; Lung disease; Bronchitis	0.9 0.1 0.3 0.7 0.2 0.8 0.1 0.9	Asia
+Table	conditionalProbability	Visit To Asia	0.99 0.01	Asia
+Table	conditionalProbability	Smoking	0.5 0.5	Asia
+Table	conditionalProbability	Lung cancer; Smoking	0.99 0.01 0.9 0.1	Asia
+Table	conditionalProbability	Tuberculosis; Visit To Asia	0.99 0.01 0.95 0.05	Asia
+Table	conditionalProbability	Lung disease; Lung cancer; Tuberculosis; COVID-19	1.0 0.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0	Asia
+Table	conditionalProbability 	COVID-19; Smoking; Visit To Asia	0.7 0.3 0.3 0.7 0.5 0.5 0.05 0.95	Asia

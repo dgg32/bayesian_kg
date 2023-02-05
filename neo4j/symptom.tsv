@@ -1,0 +1,3 @@
+name	type	role	states	x	y	label	model	description
+X-ray	finiteStates	chance	no; yes	214.0	397.0	Symptom	Asia	NULL
+Dyspnea	finiteStates	chance	no; yes	509.0	400.0	Symptom	Asia	Shortness of breath — known medically as dyspnea — is often described as an intense tightening in the chest, air hunger, difficulty breathing, breathlessness or a feeling of suffocation. Very strenuous exercise, extreme temperatures, obesity and higher altitude all can cause shortness of breath in a healthy person.

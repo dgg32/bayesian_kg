@@ -1,0 +1,4 @@
+source	target	label	model
+Bronchitis	Dyspnea	HAS_SYMPTOM	Asia
+Lung disease	Dyspnea	HAS_SYMPTOM	Asia
+Lung disease	X-ray	HAS_SYMPTOM	Asia

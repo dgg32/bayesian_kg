@@ -1,0 +1,3 @@
+name	type	role	states	x	y	label	model	description
+Lung	NULL	NULL	NULL	NULL	NULL	Anatomy	NULL	One of a pair of organs in the chest that supplies the body with oxygen, and removes carbon dioxide from the body.
+Bronchi	NULL	NULL	NULL	NULL	NULL	Anatomy	NULL	A bronchus is a passage or airway in the lower respiratory tract that conducts air into the lungs.

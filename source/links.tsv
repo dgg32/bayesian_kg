@@ -1,0 +1,17 @@
+source	target	label	model
+Bronchitis	Dyspnea	HAS_SYMPTOM	Asia
+Visit To Asia	Tuberculosis	INCREASES_RISK	Asia
+Visit To Asia	COVID-19	INCREASES_RISK	Asia
+Smoking	Bronchitis	INCREASES_RISK	Asia
+Smoking	Lung cancer	INCREASES_RISK	Asia
+Smoking	COVID-19	INCREASES_RISK	Asia
+Lung cancer	Lung disease	IS_A	Asia
+Tuberculosis	Lung disease	IS_A	Asia
+COVID-19	Lung disease	IS_A	Asia
+Lung disease	Dyspnea	HAS_SYMPTOM	Asia
+Lung disease	X-ray	HAS_SYMPTOM	Asia
+Lung cancer	Lung	LOCATED_IN	
+Bronchitis	Bronchi	LOCATED_IN	
+Tuberculosis	Lung	LOCATED_IN	
+COVID-19	Lung	LOCATED_IN	
+Lung disease	Lung	LOCATED_IN	

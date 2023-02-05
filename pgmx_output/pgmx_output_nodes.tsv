@@ -1,0 +1,10 @@
+name	type	role	states	x	y
+X-ray	finiteStates	chance	no; yes	214	397
+Bronchitis	finiteStates	chance	no; yes	701	216
+Dyspnea	finiteStates	chance	no; yes	509	400
+Visit To Asia	finiteStates	chance	no; yes	204	55
+Smoking	finiteStates	chance	no; yes	625	61
+Lung cancer	finiteStates	chance	no; yes	444	163
+Tuberculosis	finiteStates	chance	no; yes	202	163
+Lung disease	finiteStates	chance	no; yes	325	284
+COVID-19	finiteStates	chance	no; yes	377	171
