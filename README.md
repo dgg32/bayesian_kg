@@ -46,7 +46,11 @@ python tsv_to_neo4j.py
 ```
 It generates a series of files in the ./neo4j folder.
 
+3. Other utility files.
 
+pgmx_to_tsv.py is to parse a PGMX file and generate a node, a link and a potential TSV file. You use this script when you have modified data in OpenMarkov and want to overwrite the changes back into your TSV files.
+
+And you can use upsert_tsv.py to upsert the new data into an old TSV file.
 
 ## Authors
 
