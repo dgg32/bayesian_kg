@@ -2,15 +2,17 @@ import pandas as pd
 import yaml
 import sys
 import tsv_to_pgmx
+from model_filter import filter_by_model
 
+if len(sys.argv) != 2:
+    sys.exit(f"Usage: python {sys.argv[0]} <model_name>")
 model = sys.argv[1]
-
 
 with open("config.yaml", "r") as stream:
     try:
         PARAM = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
-        print(exc)
+        sys.exit(f"Failed to parse config.yaml: {exc}")
 
 sheet_id = PARAM["google_sheet_id"]
 nodes_sheet = PARAM["google_sheet_node"]
@@ -26,18 +28,12 @@ links = pd.read_csv(links_url)
 potentials_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={potentials_name}"
 potentials = pd.read_csv(potentials_url)
 
+model_nodes = filter_by_model(nodes, model)
+model_links = filter_by_model(links, model)
+model_potentials = filter_by_model(potentials, model)
 
-model_nodes = nodes[nodes['model'].notna()]
-mask = model_nodes['model'].str.split(";").apply(lambda x: model in [e.strip() for e in x])
-model_nodes = model_nodes[mask]
-
-model_links = links[links['model'].notna()]
-mask = model_links['model'].str.split(";").apply(lambda x: model in [e.strip() for e in x])
-model_links = model_links[mask]
-
-model_potentials = potentials[potentials['model'].notna()]
-mask = model_potentials['model'].str.split(";").apply(lambda x: model in [e.strip() for e in x])
-model_potentials = model_potentials[mask]
+if model_nodes.empty:
+    print(f"Warning: no nodes found for model '{model}'. Check the spelling in the Google Sheet.", file=sys.stderr)
 
 pgmx = tsv_to_pgmx.get_pgmx(model_nodes, model_links, model_potentials)
-print (pgmx)
+print(pgmx)
