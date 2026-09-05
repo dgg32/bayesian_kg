@@ -196,7 +196,7 @@
             </Variables>
             <Values>1.0 0.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0 0.0 1.0</Values>
         </Potential>
-      <Potential type="Table" role="conditionalProbability ">
+      <Potential type="Table" role="conditionalProbability">
             <Variables>
             <Variable name="COVID-19" />
             <Variable name="Smoking" />

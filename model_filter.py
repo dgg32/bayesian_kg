@@ -17,6 +17,12 @@ def filter_by_model(df: pd.DataFrame, model: str, column: str = "model") -> pd.D
     Returns:
         pd.DataFrame: rows of df whose model column includes `model`
     """
+    if column not in df.columns:
+        raise KeyError(f"Expected a '{column}' column but found: {list(df.columns)}")
+
     with_model = df[df[column].notna()]
-    mask = with_model[column].str.split(";").apply(lambda names: model in [n.strip() for n in names])
+    # .astype(str) makes this robust to a model column that pandas inferred
+    # as numeric (e.g. every model name in the sheet happens to look like a
+    # number), where the .str accessor would otherwise raise.
+    mask = with_model[column].astype(str).str.split(";").apply(lambda names: model in [n.strip() for n in names])
     return with_model[mask]
