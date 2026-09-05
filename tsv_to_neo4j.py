@@ -13,13 +13,15 @@ def to_neo4j(nodes_df: pd.DataFrame, links_df: pd.DataFrame):
     Returns:
     """
 
-    node_labels = pd.unique(nodes_df['label'])
+    os.makedirs(output_folder, exist_ok=True)
+
+    node_labels = nodes_df['label'].dropna().unique()
 
     for l in node_labels:
         temp_df = nodes_df[nodes_df['label'] == l]
         temp_df.to_csv(os.path.join(output_folder, l.lower() + ".tsv"), sep="\t", index=False, na_rep='NULL')
 
-    link_labels = pd.unique(links_df['label'])
+    link_labels = links_df['label'].dropna().unique()
 
     for l in link_labels:
         temp_df = links_df[links_df['label'] == l]
