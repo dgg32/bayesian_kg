@@ -1,12 +1,30 @@
+import os
+import sys
+
 import pandas as pd
 from jinja2 import Environment, FileSystemLoader
-import sys
 
 from model_filter import filter_by_model
 
-file_loader = FileSystemLoader('templates')
-env = Environment(loader=file_loader)
+# Anchor all paths to this file's location so the scripts behave the same
+# regardless of the caller's current working directory.
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+file_loader = FileSystemLoader(os.path.join(BASE_DIR, "templates"))
+# autoescape=True is required even though this is XML, not HTML: without it
+# a node/state name containing "&", "<", "\"", etc. (all legal in a Google
+# Sheet) is written raw into an attribute value and produces a PGMX file
+# that no XML parser (including OpenMarkov's) can read.
+env = Environment(loader=file_loader, autoescape=True)
 template = env.get_template('unicriterion_pgmx.txt')
+
+
+def _require(value, node_name: str, field: str):
+    """Raise a clear error instead of letting a NaN silently render as the
+    literal text "nan" in the generated PGMX (invalid for OpenMarkov)."""
+    if pd.isna(value):
+        raise ValueError(f"Node '{node_name}' is missing its '{field}' value in nodes.tsv")
+    return value
 
 
 def get_pgmx(nodes_df: pd.DataFrame, links_df: pd.DataFrame, potentials_df: pd.DataFrame) -> str:
@@ -22,8 +40,9 @@ def get_pgmx(nodes_df: pd.DataFrame, links_df: pd.DataFrame, potentials_df: pd.D
 
     nodes_to_jinja = []
     for position, (_, row) in enumerate(nodes_df.iterrows()):
-
-        states = [x.strip() for x in row["states"].split(";")]
+        name = row["name"]
+        states_raw = _require(row["states"], name, "states")
+        states = [x.strip() for x in states_raw.split(";")]
 
         # Fall back to a simple diagonal layout when a node has no
         # explicit coordinates. Use the enumeration position rather than
@@ -38,9 +57,9 @@ def get_pgmx(nodes_df: pd.DataFrame, links_df: pd.DataFrame, potentials_df: pd.D
             y = int(row["y"])
 
         nodes_to_jinja.append({
-            "name": row["name"],
-            "type": row["type"],
-            "role": row["role"],
+            "name": name,
+            "type": _require(row["type"], name, "type"),
+            "role": _require(row["role"], name, "role"),
             "states": states,
             "x": x,
             "y": y,
@@ -53,11 +72,18 @@ def get_pgmx(nodes_df: pd.DataFrame, links_df: pd.DataFrame, potentials_df: pd.D
     potentials_to_jinja = []
     for _, row in potentials_df.iterrows():
         variables = [x.strip() for x in row["variables"].split(";")]
+        values = row["values"]
+        if isinstance(values, str) and "," in values:
+            print(
+                f"Warning: potential for {variables} has a comma in its values "
+                "(expected space-separated numbers) — OpenMarkov may misread the table.",
+                file=sys.stderr,
+            )
         potentials_to_jinja.append({
             "type": row["type"].strip(),
             "role": row["role"].strip(),
             "variables": variables,
-            "value": row["values"],
+            "value": values,
         })
 
     output = template.render(nodes=nodes_to_jinja, links=links_to_jinja, potentials=potentials_to_jinja)
@@ -69,9 +95,9 @@ if __name__ == "__main__":
         sys.exit(f"Usage: python {sys.argv[0]} <model_name>")
     model = sys.argv[1]
 
-    nodes = pd.read_csv("./source/nodes.tsv", sep="\t")
-    links = pd.read_csv("./source/links.tsv", sep="\t")
-    potentials = pd.read_csv("./source/potentials.tsv", sep="\t")
+    nodes = pd.read_csv(os.path.join(BASE_DIR, "source", "nodes.tsv"), sep="\t")
+    links = pd.read_csv(os.path.join(BASE_DIR, "source", "links.tsv"), sep="\t")
+    potentials = pd.read_csv(os.path.join(BASE_DIR, "source", "potentials.tsv"), sep="\t")
 
     model_nodes = filter_by_model(nodes, model)
     model_links = filter_by_model(links, model)
